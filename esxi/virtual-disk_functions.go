@@ -159,11 +159,11 @@ func virtualDiskREAD(c *Config, virtdisk_id string) (string, string, string, int
 	}
 
 	//  Get virtual disk flat size
-	s = strings.Split(virtual_disk_name, ".")
-	if len(s) < 2 {
+	i := strings.LastIndex(virtual_disk_name, ".")
+	if i < 0 {
 		return "", "", "", 0, "", err
 	}
-	virtual_disk_nameFlat := fmt.Sprintf("%s-flat.%s", s[0], s[1])
+	virtual_disk_nameFlat := fmt.Sprintf("%s-flat.%s", virtual_disk_name[:i], virtual_disk_name[i+1:])
 
 	remote_cmd = fmt.Sprintf("ls -l \"/vmfs/volumes/%s/%s/%s\" | awk '{print $5}'",
 		virtual_disk_disk_store, virtual_disk_dir, virtual_disk_nameFlat)
